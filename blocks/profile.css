@@ -5,10 +5,11 @@
 }
 
 .profile__avatar {
-  margin-left: 20px;
   border-radius: 8px;
   width: 190px;
   height: 190px;
+  object-fit: cover;
+  object-position: center;
 }
 
 .profile__column {
@@ -22,6 +23,7 @@
   font-family: Poppins, Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size: 32px;
+  color: rgba(33, 33, 33, 1);
   line-height: 1;
   letter-spacing: normal;
   max-width: 288px;
@@ -65,14 +67,21 @@
   cursor: pointer;
 }
 
+.profile__edit-btn::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-image: url(../images/Edit_pencil_img.svg);
+}
+
 .profile__edit-btn:hover {
-  color: #212121;
   opacity: 100%;
 }
 
 .profile__add-btn {
-  margin: 138px 0 0 auto;
+  margin-top: auto;
   border-radius: 8px;
+  border: 0;
   width: 149px;
   height: 52px;
   display: flex;
@@ -90,8 +99,14 @@
   cursor: pointer;
 }
 
+.profile__add-btn::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  background-image: url(../images/plus-symbol.svg);
+}
+
 .profile__add-btn:hover {
-  background-color: #212121;
   opacity: 80%;
 }
 
