@@ -28,6 +28,7 @@
   border-radius: 8px;
   padding: 32px 50px;
   position: relative;
+  box-sizing: border-box;
 }
 
 .modal__close-btn {
@@ -53,7 +54,6 @@
   font-weight: 500;
   font-size: 32px;
   line-height: 100%;
-  letter-spacing: 0%;
 }
 
 .modal__form {
@@ -67,7 +67,6 @@
   font-weight: 500;
   font-size: 16px;
   line-height: 110%;
-  letter-spacing: 0%;
   color: rgba(33, 33, 33, 0.7);
 }
 
@@ -81,7 +80,6 @@
   font-weight: 500;
   font-size: 20px;
   line-height: 100%;
-  letter-spacing: 0%;
   color: rgba(33, 33, 33, 0.7);
   border: 1px solid rgba(33, 33, 33, 0.4);
   cursor: pointer;
@@ -98,17 +96,20 @@
 .modal__save-btn {
   max-width: 156px;
   width: 100%;
-  padding: 18px 58px;
+  padding: 18px 0;
   border-radius: 8px;
   background-color: rgba(33, 33, 33, 1);
   font-family: Poppins, Arial, Helvetica, sans-serif;
   font-weight: 500;
   font-size: 16px;
   line-height: 100%;
-  letter-spacing: 0%;
   color: rgba(252, 245, 229, 1);
   cursor: pointer;
   border: none;
+}
+
+.modal__save-btn:hover {
+  background-color: rgba(33, 33, 33, 0.8);
 }
 
 @media screen and (max-width: 627px) {
@@ -117,7 +118,6 @@
   }
 
   .modal__container {
-    max-width: 276px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -131,7 +131,6 @@
   }
 
   .modal__close-btn {
-    position: absolute;
     top: 12px;
     right: 12px;
   }
@@ -139,7 +138,6 @@
   .modal__save-btn {
     max-width: none;
     width: 100%;
-    padding: 18px 118px;
   }
 
   .modal__input {
