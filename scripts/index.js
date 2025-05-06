@@ -63,6 +63,10 @@ const cardTemplate = document
 
 const cardsList = document.querySelector(".cards__list");
 
+previewModalCloseBtn.addEventListener("click", () => {
+  closeModal(previewModal);
+});
+
 function getCardElement(data) {
   const cardElement = cardTemplate.cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
@@ -74,7 +78,7 @@ function getCardElement(data) {
 
   const cardLikeBtn = cardElement.querySelector(".card__like-btn");
   cardLikeBtn.addEventListener("click", () => {
-    cardLikeBtn.classList.toggle(".card__like-btn_active");
+    cardLikeBtn.classList.toggle("card__like-btn_active");
   });
 
   const cardDeleteBtn = cardElement.querySelector(".card__delete-btn");
@@ -108,10 +112,6 @@ editProfileBtn.addEventListener("click", function () {
 
 editProfileCloseBtn.addEventListener("click", function () {
   closeModal(editProfileModal);
-});
-
-previewModalCloseBtn.addEventListener("click", () => {
-  closeModal(previewModal);
 });
 
 newPostBtn.addEventListener("click", function () {
