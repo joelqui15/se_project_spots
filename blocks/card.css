@@ -3,6 +3,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .card__content {
@@ -37,6 +38,7 @@
 
 .card__like-btn {
   background-image: url(../images/Union.svg);
+  background-repeat: no-repeat;
   width: 23px;
   height: 20px;
   border: none;
@@ -49,6 +51,32 @@
 
 .card__like-btn:hover {
   opacity: 100%;
+}
+
+.card__like-btn_active {
+  background-image: url(../images/red_liked_btn.svg);
+  opacity: 1;
+}
+
+.card__like-btn_active:hover {
+  opacity: 0.4;
+}
+
+.card__delete-btn {
+  background-image: url(../images/delete-btn_default.svg);
+  background-color: transparent;
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  top: 10px;
+  left: 371px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.card__delete-btn:hover {
+  background-image: url(../images/delete-btn_hover.png);
 }
 
 @media screen and (max-width: 627px) {
@@ -67,5 +95,9 @@
     width: 20px;
     background-size: contain;
     background-repeat: no-repeat;
+  }
+
+  .card__delete-btn {
+    left: 246px;
   }
 }
