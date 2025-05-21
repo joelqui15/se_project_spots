@@ -109,10 +109,11 @@ editProfileBtn.addEventListener("click", function () {
   editProfileNameInput.value = profileName.textContent;
   editProfileDescriptionInput.value = profileDescription.textContent;
   openModal(editProfileModal);
-  resetValidation(editProfileForm, [
-    editProfileNameInput,
-    editProfileDescriptionInput,
-  ]);
+  resetValidation(
+    editProfileForm,
+    [editProfileNameInput, editProfileDescriptionInput],
+    settings
+  );
 });
 
 editProfileCloseBtn.addEventListener("click", function () {
@@ -121,10 +122,19 @@ editProfileCloseBtn.addEventListener("click", function () {
 
 newPostBtn.addEventListener("click", function () {
   openModal(newPostModal);
+  resetValidation(newPostForm, [newPostImageLink, newPostCaption], settings);
 });
 
 newPostCloseBtn.addEventListener("click", function () {
   closeModal(newPostModal);
+});
+
+document.querySelectorAll(".modal").forEach((modal) => {
+  modal.addEventListener("mousedown", (event) => {
+    if (event.target === modal) {
+      closeModal(modal);
+    }
+  });
 });
 
 function editProfileHandlerSubmit(evt) {
