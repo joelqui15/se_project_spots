@@ -42,7 +42,8 @@ const toggleButtonState = (inputList, buttonEl, config) => {
   }
 };
 
-const disabledButton = (buttonEl) => {
+const disabledButton = (buttonEl, config) => {
+  buttonEl.classList.add(config.inactiveButtonClass);
   buttonEl.disabled = true;
 };
 
@@ -56,7 +57,7 @@ const setEventListeners = (formEl, config) => {
   const inputList = Array.from(formEl.querySelectorAll(config.inputSelector));
   const buttonElement = formEl.querySelector(config.submitButtonSelector);
 
-  toggleButtonState(inputList, buttonElement);
+  toggleButtonState(inputList, buttonElement, config);
 
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", function () {
