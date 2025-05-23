@@ -129,12 +129,22 @@ newPostCloseBtn.addEventListener("click", function () {
   closeModal(newPostModal);
 });
 
+function closeModalEvents(event) {
+  const openedModal = document.querySelector(".modal_is-opened");
+
+  if (event.type === "keydown" && event.key === "Escape" && openedModal) {
+    closeModal(openedModal);
+  }
+
+  if (event.type === "mousedown" && event.target.classList.contains("modal")) {
+    closeModal(event.target);
+  }
+}
+
+document.addEventListener("keydown", closeModalEvents);
+
 document.querySelectorAll(".modal").forEach((modal) => {
-  modal.addEventListener("mousedown", (event) => {
-    if (event.target === modal) {
-      closeModal(modal);
-    }
-  });
+  modal.addEventListener("mousedown", closeModalEvents);
 });
 
 function editProfileHandlerSubmit(evt) {
