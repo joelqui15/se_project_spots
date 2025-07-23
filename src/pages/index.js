@@ -1,37 +1,75 @@
 import "../pages/index.css";
 import { enableValidation, settings } from "../scripts/validation.js";
+import Api from "../utils/Api.js";
 
-const initialCards = [
-  {
-    name: "Golden Gate bridge",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/7-photo-by-griffin-wooldridge-from-pexels.jpg",
+//const initialCards = [
+//{
+//name: "Golden Gate bridge",
+// link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/7-photo-by-griffin-wooldridge-from-pexels.jpg",
+//},
+//{
+//name: "Val Thorens",
+//link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/1-photo-by-moritz-feldmann-from-pexels.jpg",
+//},
+//{
+//name: "Restaurant terrace",
+//link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/2-photo-by-ceiline-from-pexels.jpg",
+//},
+//{
+//name: "An outdoor cafe",
+//link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/3-photo-by-tubanur-dogan-from-pexels.jpg",
+//},
+// {
+// name: "A very long bridge, over the forest and through the trees",
+// link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/4-photo-by-maurice-laschet-from-pexels.jpg",
+//},
+// {
+//   name: "Tunnel with morning light",
+//   link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/5-photo-by-van-anh-nguyen-from-pexels.jpg",
+// },
+// {
+//   name: "Mountain house",
+//   link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/6-photo-by-moritz-feldmann-from-pexels.jpg",
+//
+// },
+//];
+
+const api = new Api({
+  baseUrl: "https://around-api.en.tripleten-services.com/v1",
+  headers: {
+    authorization: "71047314-a332-46a2-814c-ea3e8c58fd23",
+    "Content-Type": "application/json",
   },
-  {
-    name: "Val Thorens",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/1-photo-by-moritz-feldmann-from-pexels.jpg",
-  },
-  {
-    name: "Restaurant terrace",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/2-photo-by-ceiline-from-pexels.jpg",
-  },
-  {
-    name: "An outdoor cafe",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/3-photo-by-tubanur-dogan-from-pexels.jpg",
-  },
-  {
-    name: "A very long bridge, over the forest and through the trees",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/4-photo-by-maurice-laschet-from-pexels.jpg",
-  },
-  {
-    name: "Tunnel with morning light",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/5-photo-by-van-anh-nguyen-from-pexels.jpg",
-  },
-  {
-    name: "Mountain house",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/spots/6-photo-by-moritz-feldmann-from-pexels.jpg",
-  },
-];
+});
+
+api
+
+  .renderCardInfo()
+  .then(([cards, userInfo]) => {
+    console.log(cards);
+    console.log(userInfo);
+    cards.forEach((item) => {
+      const cardElement = getCardElement(item);
+      cardsList.append(cardElement);
+    });
+    profileName.textContent = userInfo.name;
+    profileDescription.textContent = userInfo.about;
+    const profileAvatar = document.querySelector(".profile__avatar");
+    profileAvatar.src = userInfo.avatar;
+  })
+  .catch(console.error);
+
+//set up updateUserInfo and updateUserAvatar methods
+
+//edit avatar modal
+const avatarModal = document.querySelector("#avatar-modal");
+const avatarSubmitBtn = avatarModal.querySelector(".modal__save-btn");
+const avatarModalCloseBtn = avatarModal.querySelector(".modal__close-btn");
+const avatarModalForm = avatarModal.querySelector(".modal__form");
+const avatarInput = avatarModal.querySelector("#profile-avatar-input");
+
 //edit modal
+const avatarModalBtn = document.querySelector(".profile__avatar-btn");
 const editProfileBtn = document.querySelector(".profile__edit-btn");
 const editProfileModal = document.querySelector("#edit-profile-modal");
 const editProfileCloseBtn = editProfileModal.querySelector(".modal__close-btn");
@@ -150,11 +188,48 @@ document.querySelectorAll(".modal").forEach((modal) => {
   modal.addEventListener("mousedown", closeModalEvents);
 });
 
+// Avatar modal open & close handlers
+avatarModalBtn.addEventListener("click", function () {
+  openModal(avatarModal);
+});
+
+avatarModalCloseBtn.addEventListener("click", function () {
+  closeModal(avatarModal);
+});
+
+//submit handler for avatar modal
+avatarModalForm.addEventListener("submit", avatarHandlerSubmit);
+
+function avatarHandlerSubmit(evt) {
+  evt.preventDefault();
+
+  api
+
+    .updateUserAvatar({ avatar: avatarInput.value })
+    .then((data) => {
+      // Use data for updating the avatar
+      const profileAvatar = document.querySelector(".profile__avatar");
+      profileAvatar.alt = "User avatar";
+      profileAvatar.src = data.avatar;
+      closeModal(avatarModal);
+    })
+    .catch(console.error);
+}
+
 function editProfileHandlerSubmit(evt) {
   evt.preventDefault();
-  profileName.textContent = editProfileNameInput.value;
-  profileDescription.textContent = editProfileDescriptionInput.value;
-  closeModal(editProfileModal);
+  api
+    .updateUserInfo({
+      name: editProfileNameInput.value,
+      about: editProfileDescriptionInput.value,
+    })
+    .then((data) => {
+      // Use data for updating the profile
+      profileName.textContent = data.name;
+      profileDescription.textContent = data.about;
+      closeModal(editProfileModal);
+    })
+    .catch(console.error);
 }
 
 editProfileForm.addEventListener("submit", editProfileHandlerSubmit);
@@ -175,10 +250,5 @@ function newPostHandlerSubmit(evt) {
 }
 
 newPostForm.addEventListener("submit", newPostHandlerSubmit);
-
-initialCards.forEach(function (item) {
-  const cardElement = getCardElement(item);
-  cardsList.append(cardElement);
-});
 
 enableValidation(settings);
