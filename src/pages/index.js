@@ -136,8 +136,8 @@ function getCardElement(data) {
   cardTitle.textContent = data.name;
   cardImage.src = data.link;
   cardImage.alt = data.name;
-
-  if (data.likes?.some((user) => user._id === currentUserId)) {
+  console.log("Card data:", data);
+  if (data.isLiked) {
     cardElement
       .querySelector(".card__like-btn")
       .classList.add("card__like-btn_active");
@@ -219,19 +219,18 @@ document.querySelectorAll(".modal").forEach((modal) => {
 
 //like status handler
 function handleLike(evt, cardId) {
-  //check if the card is already liked
-  const isNowLiked = evt.target;
-  const isLiked = isNowLiked.classList.contains("card__like-btn_active");
+  const likeButton = evt.target;
+  const isLiked = likeButton.classList.contains("card__like-btn_active");
+
+  // Update the like status of the card
+
   api
     .likeStatus({ cardId, isLiked })
-    .then((updatedCard) => {
-      const isNowLiked = updatedCard.likes?.some(
-        (user) => user._id === currentUserId
-      );
-      if (isNowLiked) {
-        isNowLiked.classList.add("card__like-btn_active");
+    .then(() => {
+      if (isLiked) {
+        likeButton.classList.remove("card__like-btn_active");
       } else {
-        isNowLiked.classList.remove("card__like-btn_active");
+        likeButton.classList.add("card__like-btn_active");
       }
     })
     .catch(console.error);
