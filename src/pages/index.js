@@ -1,5 +1,10 @@
+import { data } from "autoprefixer";
 import "../pages/index.css";
-import { enableValidation, settings } from "../scripts/validation.js";
+import {
+  enableValidation,
+  resetValidation,
+  settings,
+} from "../scripts/validation.js";
 import Api from "../utils/Api.js";
 
 //const initialCards = [
@@ -72,7 +77,9 @@ const deleteModal = document.querySelector("#delete-modal");
 const deleteForm = deleteModal.querySelector(".modal__form");
 const deleteModalCloseBtn = deleteModal.querySelector(".modal__close-btn");
 const deleteModalCancelBtn = deleteModal.querySelector(".modal__cancel-btn");
-const deleteModalBtn = deleteModal.querySelector(".modal__delete-btn");
+const deleteModalBtn = deleteModal.querySelector(
+  ".modal__save-btn_type_delete"
+);
 
 //edit modal
 const avatarModalBtn = document.querySelector(".profile__avatar-btn");
@@ -130,9 +137,7 @@ function getCardElement(data) {
   cardImage.alt = data.name;
 
   const cardLikeBtn = cardElement.querySelector(".card__like-btn");
-  cardLikeBtn.addEventListener("click", () => {
-    cardLikeBtn.classList.toggle("card__like-btn_active");
-  });
+  cardLikeBtn.addEventListener("click", (evt) => handleLike(evt, data._id));
 
   cardDeleteBtn.addEventListener("click", () => {
     cardDeleteHandler(cardElement, data._id);
@@ -204,6 +209,18 @@ document.querySelectorAll(".modal").forEach((modal) => {
   modal.addEventListener("mousedown", closeModalEvents);
 });
 
+//like status handler
+function handleLike(evt, cardId) {
+  //check if the card is already liked
+  const likeBtn = evt.target;
+  const isLiked = likeBtn.classList.contains("card__like-btn_active");
+  api
+    .likeStatus({ cardId, isLiked })
+    .then(() => {
+      likeBtn.classList.toggle("card__like-btn_active");
+    })
+    .catch(console.error);
+}
 // Avatar modal open & close handlers
 avatarModalBtn.addEventListener("click", function () {
   openModal(avatarModal);
