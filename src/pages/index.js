@@ -51,8 +51,7 @@ api
 
   .renderCardInfo()
   .then(([cards, userInfo]) => {
-    console.log(cards);
-    console.log(userInfo);
+    currentUserId = userInfo._id;
     cards.forEach((item) => {
       const cardElement = getCardElement(item);
       cardsList.append(cardElement);
@@ -115,6 +114,8 @@ const previewModalCaption = previewModal.querySelector(".modal__caption");
 let selectedCard;
 let selectedCardId;
 
+let currentUserId;
+
 // card items
 const cardTemplate = document
   .querySelector("#card-template")
@@ -136,6 +137,12 @@ function getCardElement(data) {
   cardImage.src = data.link;
   cardImage.alt = data.name;
 
+  if (data.likes?.some((user) => user._id === currentUserId)) {
+    cardElement
+      .querySelector(".card__like-btn")
+      .classList.add("card__like-btn_active");
+  }
+
   const cardLikeBtn = cardElement.querySelector(".card__like-btn");
   cardLikeBtn.addEventListener("click", (evt) => handleLike(evt, data._id));
 
@@ -149,7 +156,8 @@ function getCardElement(data) {
     previewModalCaption.textContent = data.name;
     openModal(previewModal);
   });
-
+  console.log("Card likes:", data.likes);
+  console.log("Current user ID:", currentUserId);
   return cardElement;
 }
 
@@ -212,12 +220,19 @@ document.querySelectorAll(".modal").forEach((modal) => {
 //like status handler
 function handleLike(evt, cardId) {
   //check if the card is already liked
-  const likeBtn = evt.target;
-  const isLiked = likeBtn.classList.contains("card__like-btn_active");
+  const isNowLiked = evt.target;
+  const isLiked = isNowLiked.classList.contains("card__like-btn_active");
   api
     .likeStatus({ cardId, isLiked })
-    .then(() => {
-      likeBtn.classList.toggle("card__like-btn_active");
+    .then((updatedCard) => {
+      const isNowLiked = updatedCard.likes?.some(
+        (user) => user._id === currentUserId
+      );
+      if (isNowLiked) {
+        isNowLiked.classList.add("card__like-btn_active");
+      } else {
+        isNowLiked.classList.remove("card__like-btn_active");
+      }
     })
     .catch(console.error);
 }
