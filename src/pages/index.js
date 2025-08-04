@@ -345,23 +345,9 @@ function editProfileHandlerSubmit(evt) {
 
 editProfileForm.addEventListener("submit", editProfileHandlerSubmit);
 
-function newPostHandlerSubmit(evt) {
-  evt.preventDefault();
-  const inputValues = {
-    name: newPostCaption.value,
-    link: newPostImageLink.value,
-  };
 
-  const cardElement = getCardElement(inputValues);
-  cardsList.prepend(cardElement);
-  closeModal(newPostModal);
-  disabledButton(submitButton, settings);
-
-  newPostForm.reset();
-}
 
 deleteForm.addEventListener("submit", handleDeleteSubmit);
 
-newPostForm.addEventListener("submit", newPostHandlerSubmit);
 
 enableValidation(settings);
